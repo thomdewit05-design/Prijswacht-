@@ -1,11 +1,13 @@
 import SwiftData
 import SwiftUI
+import UIKit
 import UserNotifications
 
 @main
 struct PrijswachtApp: App {
     @State private var router = AppRouter.shared
     @State private var plus = PlusStore()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     private let notificationDelegate = NotificationDelegate()
 
     init() {
@@ -21,6 +23,28 @@ struct PrijswachtApp: App {
                 .task { await plus.start() }
         }
         .modelContainer(AppGroup.container)
+    }
+}
+
+/// Registratie voor pushmeldingen. Alleen nodig met een ingestelde server;
+/// die stuurt de melding bij een prijsdaling.
+final class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        if ServerClient.config != nil {
+            application.registerForRemoteNotifications()
+        }
+        return true
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        ServerClient.apnsToken = deviceToken.map { String(format: "%02x", $0) }.joined()
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Zonder push werkt de app verder; de stand komt bij het openen binnen.
     }
 }
 
@@ -66,8 +90,15 @@ struct RootView: View {
             OnboardingView { hasOnboarded = true }
         }
         .onChange(of: scenePhase) { _, phase in
-            guard phase == .active else { return }
-            Task { await PriceChecker.refreshReminders(in: context) }
+            if phase == .active {
+                Task {
+                    await PriceChecker.refreshReminders(in: context)
+                    await PriceChecker.sync(in: context)
+                    PriceChecker.updateWidget(in: context)
+                }
+            } else if phase == .background {
+                Task { @MainActor in PriceChecker.updateWidget(in: context) }
+            }
         }
     }
 }

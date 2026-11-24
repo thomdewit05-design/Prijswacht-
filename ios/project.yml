@@ -16,6 +16,10 @@ settings:
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     TARGETED_DEVICE_FAMILY: "1"
+    # Vul deze twee in zodra het Supabase-project bestaat. Leeg betekent: de
+    # app werkt zelfstandig, zonder server.
+    PRIJSWACHT_SERVER_URL: ""
+    PRIJSWACHT_ANON_KEY: ""
 packages:
   PrijswachtCore:
     path: PrijswachtCore
@@ -29,6 +33,7 @@ targets:
     dependencies:
       - package: PrijswachtCore
       - target: PrijswachtShare
+      - target: PrijswachtWidgets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: nl.prijswacht.app
@@ -41,9 +46,13 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         ITSAppUsesNonExemptEncryption: false
+        NSCameraUsageDescription: Maak een foto van je bon. Prijswacht leest het bedrag en de datum op je toestel uit.
+        PrijswachtServerURL: $(PRIJSWACHT_SERVER_URL)
+        PrijswachtAnonKey: $(PRIJSWACHT_ANON_KEY)
     entitlements:
       path: Prijswacht/Prijswacht.entitlements
       properties:
+        aps-environment: development
         com.apple.security.application-groups:
           - group.nl.prijswacht.app
   PrijswachtShare:
@@ -61,6 +70,8 @@ targets:
       path: PrijswachtShare/Info.plist
       properties:
         CFBundleDisplayName: Prijswacht
+        PrijswachtServerURL: $(PRIJSWACHT_SERVER_URL)
+        PrijswachtAnonKey: $(PRIJSWACHT_ANON_KEY)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
@@ -71,6 +82,29 @@ targets:
               NSExtensionActivationSupportsText: true
     entitlements:
       path: PrijswachtShare/PrijswachtShare.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.nl.prijswacht.app
+  PrijswachtWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - PrijswachtWidgets
+      - Shared/WidgetSnapshot.swift
+      - Shared/Localizable.xcstrings
+    dependencies:
+      - package: PrijswachtCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nl.prijswacht.app.widgets
+    info:
+      path: PrijswachtWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Prijswacht
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: PrijswachtWidgets/PrijswachtWidgets.entitlements
       properties:
         com.apple.security.application-groups:
           - group.nl.prijswacht.app

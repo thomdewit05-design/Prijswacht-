@@ -34,6 +34,17 @@ struct PurchaseDraft {
         }
     }
 
+    /// Voorstel uit de herkende tekst van een bon.
+    init(receipt: ReceiptParser.Result) {
+        if let total = receipt.totalCents {
+            priceText = Euro.string(total).replacingOccurrences(of: "€", with: "")
+        }
+        if let date = receipt.date, date <= .now {
+            purchaseDate = date
+        }
+        shopName = receipt.shopName ?? ""
+    }
+
     var paidCents: Int? {
         guard let cents = Euro.parse(priceText), cents > 0 else { return nil }
         return cents
@@ -51,7 +62,6 @@ struct PurchaseDraft {
             && paidCents != nil
     }
 
-    @MainActor
     func makePurchase() -> Purchase? {
         guard isComplete, let paidCents else { return nil }
         let purchase = Purchase(

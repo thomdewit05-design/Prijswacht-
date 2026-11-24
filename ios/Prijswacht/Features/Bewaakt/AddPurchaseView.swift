@@ -1,3 +1,4 @@
+import PhotosUI
 import PrijswachtCore
 import SwiftData
 import SwiftUI
@@ -13,6 +14,8 @@ struct AddPurchaseView: View {
     @State private var draft: PurchaseDraft?
     @State private var isLoading = false
     @State private var notice: LocalizedStringKey?
+    @State private var receiptPhoto: PhotosPickerItem?
+    @State private var showsCamera = false
 
     var body: some View {
         NavigationStack {
@@ -64,6 +67,34 @@ struct AddPurchaseView: View {
         }
 
         Section {
+            if CameraPicker.isAvailable {
+                Button("Fotografeer de bon", systemImage: "camera") { showsCamera = true }
+            }
+            PhotosPicker(selection: $receiptPhoto, matching: .images) {
+                Label("Kies een foto of schermafbeelding", systemImage: "photo")
+            }
+        } header: {
+            Text("Met een bon")
+        } footer: {
+            Text("We lezen het bedrag en de datum op je toestel uit. De foto wordt niet bewaard of verstuurd.")
+        }
+        .onChange(of: receiptPhoto) { _, item in
+            guard let item else { return }
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
+                    await useReceipt(image)
+                }
+                receiptPhoto = nil
+            }
+        }
+        .fullScreenCover(isPresented: $showsCamera) {
+            CameraPicker { image in
+                Task { await useReceipt(image) }
+            }
+            .ignoresSafeArea()
+        }
+
+        Section {
             Button("Vul zelf in", systemImage: "square.and.pencil") {
                 draft = PurchaseDraft()
             }
@@ -101,6 +132,16 @@ struct AddPurchaseView: View {
                 draft = PurchaseDraft(url: url, offer: nil)
             }
         }
+    }
+
+    private func useReceipt(_ image: UIImage) async {
+        isLoading = true
+        let result = await ReceiptScanner.scan(image)
+        isLoading = false
+        notice = result.totalCents == nil
+            ? "We konden geen bedrag op de bon lezen. Vul de gegevens zelf in."
+            : "Dit lazen we op de bon. Controleer het bedrag en de datum, en vul de naam van het product in."
+        draft = PurchaseDraft(receipt: result)
     }
 
     private func save() {

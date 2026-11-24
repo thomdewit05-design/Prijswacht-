@@ -15,8 +15,14 @@ prijsadapters in TypeScript.
 - `ios/Prijswacht/` hoofdapp (SwiftUI): `Features/`, `Core/`.
 - `ios/PrijswachtShare/` delen-extensie.
 - `ios/Shared/` code en bestanden voor app én extensie (App Group-opslag).
+- `ios/PrijswachtWidgets/` widget met de teller en de eerstvolgende retourtermijn.
 - `ios/project.yml` Xcode-project via XcodeGen: `cd ios && xcodegen generate`.
-- Nog niet aanwezig: `study/` (fase 0) en `server/` (fase 1).
+- `server/` prijsmotor in TypeScript zonder bouwstap (Node 22.18+):
+  `adapters/`, `jobs/`, `supabase/`, `tests/`. Testen: `cd server && npm test`
+  en `npm run typecheck`.
+- `study/` prijsstudie (fase 0); gebruikt de adapters uit `server/`.
+- De meldingsregels staan twee keer: `ios/PrijswachtCore/.../DropDetector.swift`
+  en `server/jobs/detect.ts`. Wijzig ze altijd samen.
 
 ## Regels
 - Bedragen altijd als gehele centen (Int), nooit als Double.

@@ -9,3 +9,5 @@ Package.resolved
 __pycache__/
 .env
 node_modules/
+study/products.csv
+study/run.log

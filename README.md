@@ -6,6 +6,9 @@ vragen als die prijs daalt binnen je retourtermijn.
 - Concept: [docs/concept.md](docs/concept.md)
 - Stand van zaken: [docs/status.md](docs/status.md)
 
+- Prijsstudie: [study/README.md](study/README.md)
+- Server: [server/README.md](server/README.md)
+
 ## Bouwen
 
 Rekenlogica testen (macOS of Linux):

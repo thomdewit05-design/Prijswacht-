@@ -60,7 +60,7 @@ struct BewaaktView: View {
             }
             Section {
             } footer: {
-                Text("Trek omlaag om de prijzen nu te controleren. Een daling telt pas na een tweede controle, minstens een uur later.")
+                Text("Trek omlaag om te verversen. Een daling telt pas na een tweede controle, minstens een uur later.")
             }
         }
         .refreshable { await PriceChecker.checkAll(in: context) }

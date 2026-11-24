@@ -54,7 +54,11 @@ struct InstellingenView: View {
                 Section {
                     Label("We lezen je mail niet.", systemImage: "lock.shield")
                     Label("We versturen niets namens jou.", systemImage: "hand.raised")
-                    Label("Je aankopen staan alleen op dit toestel.", systemImage: "iphone")
+                    if ServerClient.config == nil {
+                        Label("Je aankopen staan alleen op dit toestel.", systemImage: "iphone")
+                    } else {
+                        Label("Voor de dagelijkse prijscontrole bewaren we alleen product, prijs, winkel en datum.", systemImage: "server.rack")
+                    }
                     Link("Privacyverklaring", destination: AppLinks.privacy)
                     Link("Voorwaarden", destination: AppLinks.terms)
                 } header: {
@@ -80,7 +84,6 @@ struct InstellingenView: View {
 
 #if DEBUG
 /// Verzonnen aankopen om de schermen te bekijken zonder server.
-@MainActor
 enum SampleData {
     static func insert(into context: ModelContext) {
         let calendar = Calendar.current
