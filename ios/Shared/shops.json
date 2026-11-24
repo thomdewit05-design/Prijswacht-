@@ -1,0 +1,32 @@
+[
+  {
+    "id": "bol", "name": "bol", "domains": ["bol.com"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  },
+  {
+    "id": "coolblue", "name": "Coolblue", "domains": ["coolblue.nl", "coolblue.be"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  },
+  {
+    "id": "mediamarkt", "name": "MediaMarkt", "domains": ["mediamarkt.nl"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  },
+  {
+    "id": "amazon-nl", "name": "Amazon.nl", "domains": ["amazon.nl"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  },
+  {
+    "id": "zalando", "name": "Zalando", "domains": ["zalando.nl"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  },
+  {
+    "id": "gamma", "name": "GAMMA", "domains": ["gamma.nl"], "country": "NL",
+    "returnDays": 14, "returnCostCents": null, "contactURL": null, "contactEmail": null,
+    "priceGuarantee": false, "verified": false
+  }
+]
