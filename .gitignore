@@ -8,3 +8,4 @@ Package.resolved
 *.sqlite
 __pycache__/
 .env
+node_modules/

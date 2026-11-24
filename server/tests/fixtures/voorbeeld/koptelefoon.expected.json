@@ -1,0 +1,10 @@
+{
+  "ean": "8712345678906",
+  "title": "Voorbeeld koptelefoon",
+  "imageUrl": "https://voorbeeld.example/koptelefoon.jpg",
+  "price": 26100,
+  "currency": "EUR",
+  "inStock": true,
+  "isNew": true,
+  "seller": "Voorbeeldwinkel"
+}

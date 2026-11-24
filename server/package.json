@@ -1,0 +1,16 @@
+{
+  "name": "prijswacht-server",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "test": "node --test --test-reporter=spec --disable-warning=ExperimentalWarning \"tests/*.test.ts\" \"../study/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "daily": "node --disable-warning=ExperimentalWarning jobs/run.ts",
+    "recheck": "node --disable-warning=ExperimentalWarning jobs/run.ts --recheck"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.8.0"
+  }
+}
